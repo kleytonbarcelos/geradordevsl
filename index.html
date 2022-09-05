@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/gh/gitbrent/pptxgenjs@3.11.0/libs/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/gitbrent/pptxgenjs@3.11.0/dist/pptxgen.min.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+
+
+    <script>
+        function geraPPTX(){
+            let pres = new PptxGenJS();
+            let texto = $('#textVSL').val()
+
+            console.log($('#textBold').val())
+            console.log($('#textItalic').val())
+
+            let slide
+            let numberOfWordsInPage = parseInt($('#WordsPerSlide').val())
+            let textInPage = ''
+            let textSplited = texto.split(' ')
+            let contadorPaginas = 1;
+            let WordsPerPage = []
+
+            for (let i = 0; i < textSplited.length; i++) {
+                contadorPaginas++
+                textInPage = `${textInPage} ${textSplited[i]}`
+                if(contadorPaginas===numberOfWordsInPage){
+                    contadorPaginas=0
+                    WordsPerPage.push(textInPage)
+                    textInPage = ''
+                }
+            }
+            for (let i = 0; i < WordsPerPage.length; i++) {
+                slide = pres.addSlide();
+                slide.color = $('#textColor').val()
+                slide.background = { color: $('#BgColor').val() };
+                slide.addText(WordsPerPage[i], 
+                {
+                    fontSize: $('#fontSize').val(), fontFace: $('#fontFace').val(), align: $('#Align').val(),
+                    y:$('#marginTop').val(),
+                    x:$('#marginLeft').val(),
+                    w: $('#textWidth').val(),
+                    h: $('#textHeight').val(),
+                    bold: parseInt($('#textBold').val()),
+                    italic: parseInt($('#textItalic').val()),
+                    isTextBox:true,
+                    //autoFit:true,
+                    //fit:'resize',
+                    //fill: { color: "cc0000"},
+                });
+            }
+            pres.writeFile();
+        }
+    </script>
+    <style>
+        
+        body{
+            background-color: #F8F9FA;
+        }
+        .form{
+            padding-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="collapse bg-dark" id="navbarHeader">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-8 col-md-7 py-4">
+                <h4 class="text-white">Sobre</h4>
+                <p class="text-muted">Este é um gerador de VSL automático gratuito desenvolvido para ajudar produtores de conteúdo digital. Para usa-lo basta apenas inserir seu o texto e fazer o download do seu Poweer Point.</p>
+              </div>
+              <div class="col-sm-4 offset-md-1 py-4">
+                <h4 class="text-white">Contato</h4>
+                <ul class="list-unstyled">
+                  <li><a href="https://pixdata.com.br" class="text-white">Site</a></li>
+                  <li><a href="https://github.com/kleytonbarcelos" class="text-white">Github</a></li>
+                  <li><a href="#" class="text-white">Email</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="navbar navbar-dark bg-dark shadow-sm">
+          <div class="container">
+            <a href="#" class="navbar-brand d-flex align-items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="me-2" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+              <strong>Gerador de VSL</strong>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+          </div>
+        </div>
+      </header>
+    <div class="container form">
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label for="WordsPerSlide" class="form-label">Número de palavras por slide</label>
+                    <input type="text" class="form-control" id="WordsPerSlide" placeholder="" value="10">
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label for="textWidth" class="form-label">Lagura do text</label>
+                    <input type="text" class="form-control" id="textWidth" placeholder="" value="80%">
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label for="textHeight" class="form-label">Altura do text</label>
+                    <input type="text" class="form-control" id="textHeight" placeholder="" value="65%">
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label for="marginTop" class="form-label">Margem (topo)</label>
+                    <input type="text" class="form-control" id="marginTop" placeholder="" value="1">
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label for="marginLeft" class="form-label">Margem (esqueda)</label>
+                    <input type="text" class="form-control" id="marginLeft" placeholder="" value="1">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label for="fontFace" class="form-label">Nome da Fonte</label>
+                    <select class="form-select" id="fontFace" aria-label="Default select example">
+                        <option selected value="Arial">Arial</option>
+                        <option value="Helvetica Neue">Helvetica Neue</option>
+                        <option value="Comic Sans MS">Comic Sans MS</option>
+                        <option value="Courier New">Courier New</option>
+                        <option value="Impact">Impact</option>
+                        <option value="Times New Roman">Times New Roman</option>
+                        <option value="Calibri">Calibri</option>
+                        <option value="Lato">Lato</option>
+                        <option value="Open Sans">Open Sans</option>
+                        <option value="Oswald">Oswald</option>
+                        <option value="Roboto">Roboto</option>
+                        <option value="Special Elite">Special Elite</option>
+                        <option value="Tahoma">Tahoma</option>
+                        <option value="Ubuntu">Ubuntu</option>
+                        <option value="Verdana">Verdana</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label for="fontSize" class="form-label">Tamanho da Fonte</label>
+                    <input type="text" class="form-control" id="fontSize" placeholder="" value="20">
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label for="textBold" class="form-label">Bold</label>
+                    <select class="form-select" id="textBold" aria-label="Default select example">
+                        <option selected value="0">não</option>
+                        <option value="1">sim</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label for="textItalic" class="form-label">Itálico</label>
+                    <select class="form-select" id="textItalic" aria-label="Default select example">
+                        <option selected value="0">não</option>
+                        <option value="1">sim</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label for="Align" class="form-label">Alinhamento do Texto</label>
+                    <select class="form-select" id="Align" aria-label="Default select example">
+                        <option selected value="center">centralizado</option>
+                        <option value="left">esqueda</option>
+                        <option value="right">direita</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="textVSL" class="form-label">Text VSL</label>
+            <textarea class="form-control" id="textVSL" rows="10">Olá, meu nome é Ricardo Vilas Boas, e nos próximos 90 segundos eu vou te mostrar como você pode conquistar o coração de um homem dos sonhos e tê-lo completamente caído aos seus pés, apenas utilizando A Chave Secreta da Sedução. Aposto que você nunca ouviu falar desta chave não é mesmo!?Até porque este é um segredo não revelado e apenas uma a cada 1000 mulheres o conseguiram descobrir, e as que sabem nunca irão compartilhar essa informação. O que você está prestes a descobrir é uma técnica poderosa que permite que você conquiste o homem que você quiser de forma rápida e fácil. Mesmo que ele nunca tenha olhado na sua cara, ou mesmo que ele só te veja como uma amiga, ou ainda que ele não te ache atraente o suficiente, e mesmo que você só o conheça por redes sociais. Calma… esse não é mais desses golpes da internet, e também não tem nada a ver com simpatias, palavras secretas, frases mágicas ou qualquer outra coisa.</textarea>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">    
+                    <label for="textColor" class="form-label">Cor do Texto</label>
+                    <input type="color" class="form-control form-control-color" id="textColor" value="#000000" title="Cor do texto">
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">    
+                    <label for="BgColor" class="form-label">Cor de Fundo</label>
+                    <input type="color" class="form-control form-control-color" id="BgColor" value="#ffffff" title="Cor do fundo">
+                </div>
+            </div>
+        </div>
+        <div class="mb-3">    
+            <button type="button" onclick="geraPPTX()" class="btn btn-primary mb-3">Gerar PowerPoint</button>
+        </div>
+    </div>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+</html>
